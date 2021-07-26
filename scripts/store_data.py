@@ -5,7 +5,6 @@ the data directory and stores them in a MySQL database, as specified in the
 environment variables in the .env file.
 
 """
-from json import load
 from dotenv import load_dotenv
 import os
 import pandas as pd
