@@ -10,3 +10,18 @@ class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = ['id', 'title', 'tagline', 'overview', 'vote_average', 'keywords']
+
+class KeywordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Keyword
+        fields = ['id', 'name']
+
+class RankedMovieSerializer(serializers.ModelSerializer):
+    # id = serializers.IntegerField(read_only=True)
+    # matches = serializers.ListField(
+    #     child=serializers.CharField(max_length=100), allow_empty=True
+    # )
+
+    class Meta:
+        model = Movie
+        fields = ['id', 'title', 'tagline', 'overview', 'vote_average', 'keywords']
