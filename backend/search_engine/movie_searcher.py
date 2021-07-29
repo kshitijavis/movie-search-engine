@@ -19,5 +19,5 @@ class MovieSearcher:
         elif high_vote_average is not None:
             query |= Q(vote_average__lte=high_vote_average)
 
-        matched_movies = self.queryset.filter(query)
+        matched_movies = self.queryset.filter(query).distinct()
         return matched_movies

@@ -66,27 +66,55 @@ class MovieSearcherTestCase(TestCase):
     
     def testSearchByTitle(self):
         results = self.searcher.search_movies(keyword="action")
+        results_list = list(results.all())
 
-        self.assertEqual(len(results), 2)
-        self.assertIn(self.interstellar, results)
-        self.assertIn(self.avengers, results)
+        expected_list = [self.interstellar, self.avengers]
+        self.assertCountEqual(results_list, expected_list)
     
     def testSearchByLowVoteAverage(self):
         results = self.searcher.search_movies(low_vote_average=8)
+        results_list = list(results.all())
 
-        self.assertEqual(len(results), 2)
-        self.assertIn(self.interstellar, results)
-        self.assertIn(self.avengers, results)
+        expected_list = [self.interstellar, self.avengers]
+        self.assertCountEqual(results_list, expected_list)
     
     def testSearchByHighVoteAverage(self):
         results = self.searcher.search_movies(high_vote_average=9)
+        results_list = list(results.all())
 
-        self.assertEqual(len(results), 2)
-        self.assertIn(self.space_jam, results)
-        self.assertIn(self.avengers, results)
+        expected_list = [self.space_jam, self.avengers]
+        self.assertCountEqual(results_list, expected_list)
 
     def testSearchByLowAndHighVoteAverage(self):
         results = self.searcher.search_movies(low_vote_average=8, high_vote_average=9)
 
         self.assertEqual(len(results), 1)
         self.assertIn(self.avengers, results)
+    
+    def testCombination_TitleAndKeyword(self):
+        results = self.searcher.search_movies(title="Avengers", keyword="space")
+        results_list = list(results.all())
+
+        expected_list = [self.avengers, self.interstellar, self.space_jam]
+        self.assertCountEqual(results_list, expected_list)
+
+    def testCombination_TitleAndVoteAverage(self):
+        results = self.searcher.search_movies(title="Avengers", high_vote_average=7)
+        results_list = list(results.all())
+
+        expected_list = [self.space_jam, self.avengers]
+        self.assertCountEqual(results_list, expected_list)
+
+    def testCombination_TitleAndKeywordAndVoteAverage(self):
+        results = self.searcher.search_movies(title="Avengers", high_vote_average=7, keyword='space')
+        results_list = list(results.all())
+
+        expected_list = [self.space_jam, self.avengers, self.interstellar]
+        self.assertCountEqual(results_list, expected_list)
+
+    def testCaseInsensitiveMatching(self):
+        results = self.searcher.search_movies(title="avenGERS", keyword='SpACE')
+        results_list = list(results.all())
+
+        expected_list = [self.space_jam, self.avengers, self.interstellar]
+        self.assertCountEqual(results_list, expected_list)
