@@ -30,7 +30,13 @@ DATABASE_PASSWORD=<database password>
 DATABASE_HOST=<database host>
 DATABASE_PORT=<port that database is running on>
 ```
-
+## Testing
+Running the project test suite requires a test database. Create the database by running the following MySQL commands.
+```
+GRANT ALL ON test_<database name>.* to <username>@'%';
+FLUSH PRIVILEGES;
+```
+Where <database name> is the name of the database created while installing this app. Note that the test database name prepends `test_` to the application database.
 ## Notes
 The following error sometimes occurres on MacOS systems when connecting to MySQL
 ```
