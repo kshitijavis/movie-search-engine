@@ -17,11 +17,12 @@ class KeywordSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class RankedMovieSerializer(serializers.ModelSerializer):
-    # id = serializers.IntegerField(read_only=True)
-    # matches = serializers.ListField(
-    #     child=serializers.CharField(max_length=100), allow_empty=True
-    # )
+    match_summary = serializers.SerializerMethodField()
+    keywords = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Keyword.objects.all())
 
     class Meta:
         model = Movie
-        fields = ['id', 'title', 'tagline', 'overview', 'vote_average', 'keywords']
+        fields = ['id', 'title', 'tagline', 'overview', 'vote_average', 'keywords', 'match_summary']
+
+    def get_match_summary(self, obj):
+        return self.context['match_summary'].get_movie_matches(obj.id)

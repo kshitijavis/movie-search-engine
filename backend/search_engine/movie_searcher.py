@@ -1,11 +1,4 @@
-from django.db.models import Q
-
 class MovieSearcher:
-    # Given search parameters title, keyword, vote_average
-    # Create a list of movies that match at least one of the parameters
-    # Such that every entry in the list contains summary information about
-    # how it matched the criteria.
-    # Such that movies are ordered by the number of criteria they matched 
     def __init__(self, queryset):
         self.queryset = queryset
     
