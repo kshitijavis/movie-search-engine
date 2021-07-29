@@ -18,15 +18,19 @@ class MovieSearcher:
         ).distinct()
         return matched_movies
     
-    def get_summary_information(self, title = None, keyword = None,
+    def get_summary_information(self, title = None, keywords = None,
                             low_vote_average = None, high_vote_average = None):
         summary = SummaryInformation()
 
         for match in self.get_title_matches(title):
             summary.add_match(match.id, 'title', match.title)
         
-        for match in self.get_keyword_matches(keyword):
-            summary.add_match(match.id, 'keyword', keyword)
+        # Iterate through every keyword and add summary information about all movies
+        # that have keyword matches
+        if keywords is not None:
+            for keyword in keywords:
+                for match in self.get_keyword_matches(keyword):
+                    summary.add_match(match.id, 'keyword', keyword)
 
         for match in self.get_vote_average_matches(low_vote_average, high_vote_average):
             summary.add_match(match.id, 'vote_average', match.vote_average)
@@ -79,6 +83,12 @@ class SummaryInformation:
             'type': match_type,
             'contents': match_contents
         })
+
+    def get_movie_matches(self, movie_id):
+        return self.summary[movie_id]
+
+    def get_movie_count(self):
+        return len(self.summary)
     
     def __str__(self):
         return self.summary.__str__()

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from search_engine.models import Movie, Keyword
-from . import movie_searcher
+from search_engine import movie_searcher
 
 # Model tests
 class MovieKeywordsTestCase(TestCase):
@@ -146,4 +146,21 @@ class SearchSummaryInformationTestCase(TestCase):
         self.searcher = movie_searcher.MovieSearcher(Movie.objects.all())
 
     def testSearchByTitle(self):
-        print(self.searcher.get_summary_information(title="Avengers", keyword="action"))
+        summary_information = self.searcher.get_summary_information(title="Avengers", keywords=["action"])
+
+        avengers_id = self.avengers.id
+        avengers_matches = summary_information.get_movie_matches(avengers_id)
+        exepcted_avengers_matches = [
+            {'type': 'title', 'contents': 'Avengers'},
+            {'type': 'keyword', 'contents': 'action'},
+        ]
+
+        interstellar_id = self.interstellar.id
+        interstellar_matches = summary_information.get_movie_matches(interstellar_id)
+        expected_interstellar_matches = [
+            {'type': 'keyword', 'contents': 'action'},
+        ]
+
+        self.assertEqual(summary_information.get_movie_count(), 2)
+        self.assertCountEqual(avengers_matches, exepcted_avengers_matches)
+        self.assertCountEqual(interstellar_matches, expected_interstellar_matches)
