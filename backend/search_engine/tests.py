@@ -118,3 +118,32 @@ class MovieSearcherTestCase(TestCase):
 
         expected_list = [self.space_jam, self.avengers, self.interstellar]
         self.assertCountEqual(results_list, expected_list)
+
+class SearchSummaryInformationTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Build test database once for all test method
+        interstellar = Movie.objects.create(title="Interstellar", vote_average=9.8)
+        space_jam = Movie.objects.create(title="Space Jam", vote_average=6.7)
+        avengers = Movie.objects.create(title="Avengers", vote_average=8.7)
+
+        space = Keyword.objects.create(name="space")
+        sports = Keyword.objects.create(name="sports")
+        action = Keyword.objects.create(name="action")
+        fighting = Keyword.objects.create(name="fighting")
+
+        interstellar.keywords.add(space, action)
+        space_jam.keywords.add(space, sports)
+        avengers.keywords.add(action, fighting)
+    
+    def setUp(self):
+        # Retrieve movie objects from database for every test method to avoid
+        # code repitition
+        self.interstellar = Movie.objects.get(title="Interstellar")
+        self.space_jam = Movie.objects.get(title="Space Jam")
+        self.avengers = Movie.objects.get(title="Avengers")
+
+        self.searcher = movie_searcher.MovieSearcher(Movie.objects.all())
+
+    def testSearchByTitle(self):
+        print(self.searcher.get_summary_information(title="Avengers", keyword="action"))

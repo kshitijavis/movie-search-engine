@@ -18,6 +18,21 @@ class MovieSearcher:
         ).distinct()
         return matched_movies
     
+    def get_summary_information(self, title = None, keyword = None,
+                            low_vote_average = None, high_vote_average = None):
+        summary = SummaryInformation()
+
+        for match in self.get_title_matches(title):
+            summary.add_match(match.id, 'title', match.title)
+        
+        for match in self.get_keyword_matches(keyword):
+            summary.add_match(match.id, 'keyword', keyword)
+
+        for match in self.get_vote_average_matches(low_vote_average, high_vote_average):
+            summary.add_match(match.id, 'vote_average', match.vote_average)
+
+        return summary
+
     def get_title_matches(self, title):
         if title is not None:
             return self.queryset.filter(title__icontains=title)
@@ -51,3 +66,19 @@ class MovieSearcher:
         
         return self.queryset.none()
 
+
+class SummaryInformation:
+    def __init__(self):
+        self.summary = dict()
+
+    def add_match(self, movie_id, match_type, match_contents):
+        if movie_id not in self.summary:
+            self.summary[movie_id] = list()
+
+        self.summary[movie_id].append({
+            'type': match_type,
+            'contents': match_contents
+        })
+    
+    def __str__(self):
+        return self.summary.__str__()
