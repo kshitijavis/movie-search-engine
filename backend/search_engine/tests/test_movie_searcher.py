@@ -88,6 +88,14 @@ class MovieSearcherTestCase(TestCase):
 
         expected_list = [self.space_jam, self.avengers, self.interstellar]
         self.assertCountEqual(results_list, expected_list)
+    
+    # Test added after bug found when searching multiple keywords and title
+    def testCombination_TitleAndMultipleKeyword(self):
+        results = self.searcher.search_movies(title="Avengers", high_vote_average=7, keywords=['space', 'action'])
+        results_list = list(results.all())
+
+        expected_list = [self.space_jam, self.avengers, self.interstellar]
+        self.assertCountEqual(results_list, expected_list)
 
     def testCaseInsensitiveMatching(self):
         results = self.searcher.search_movies(title="avenGERS", keywords=['SpACE'])
@@ -126,14 +134,14 @@ class SearchSummaryInformationTestCase(TestCase):
         summary_information = self.searcher.get_summary_information(title="Avengers", keywords=["action"])
 
         avengers_id = self.avengers.id
-        avengers_matches = summary_information.get_movie_matches(avengers_id)
+        avengers_matches = summary_information.get_match_summary(avengers_id)
         exepcted_avengers_matches = [
             {'type': 'title', 'contents': 'Avengers'},
             {'type': 'keyword', 'contents': 'action'},
         ]
 
         interstellar_id = self.interstellar.id
-        interstellar_matches = summary_information.get_movie_matches(interstellar_id)
+        interstellar_matches = summary_information.get_match_summary(interstellar_id)
         expected_interstellar_matches = [
             {'type': 'keyword', 'contents': 'action'},
         ]

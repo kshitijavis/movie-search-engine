@@ -19,15 +19,23 @@ class KeywordSerializer(serializers.ModelSerializer):
 class RankedMovieSerializer(serializers.ModelSerializer):
     keywords = serializers.SlugRelatedField(many=True, slug_field='name', queryset=Keyword.objects.all())
     
-    # Every Movie model is paired with a match_sumary. A movies match_summary
+    # Every Movie model is paired with a match_sumary and match)scire. A movies match_summary
     # is a list of dictionaries, each describing the type and contents of the match
+    # A match_score describes how closely a movie matches the search criteria
     match_summary = serializers.SerializerMethodField()
+    match_score = serializers.SerializerMethodField()
 
     class Meta:
         model = Movie
-        fields = ['id', 'title', 'tagline', 'overview', 'vote_average', 'keywords', 'match_summary']
+        fields = ['id', 'title', 'tagline', 'overview', 'vote_average', 
+                  'keywords', 'match_summary', 'match_score']
 
     def get_match_summary(self, obj):
         # A SummaryMatch object is passed through context and the correct summary for this
         # movie is retrieved by Movie id (obj.id)
-        return self.context['match_summary'].get_movie_matches(obj.id)
+        return self.context['match_summary'].get_match_summary(obj.id)
+
+    def get_match_score(self, obj):
+        # A SummaryMatch object is passed through context and the correct summary for this
+        # movie is retrieved by Movie id (obj.id)
+        return self.context['match_summary'].get_match_score(obj.id)

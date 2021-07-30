@@ -42,5 +42,3 @@ class RankedMovieSearchTestCase(TestCase):
         get = self.client.get('/searchengine/movies/search/', {'keyword': ['action', 'space']})
         get_content = get.json()
         search_results = get_content['results']
-
-        print(search_results)
