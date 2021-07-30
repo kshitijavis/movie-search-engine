@@ -4,11 +4,11 @@ class MovieSearcher:
     
     def search_movies(self, title = None, keywords = None,
                       low_vote_average = None, high_vote_average = None):
-        matched_movies = (
-            self.get_title_matches(title) |
-            self.get_multiple_keyword_matches(keywords) |
-            self.get_vote_average_matches(low_vote_average, high_vote_average)
-        ).distinct()
+        matched_movies = self.queryset.none().union(
+            self.get_title_matches(title),
+            self.get_multiple_keyword_matches(keywords),
+            self.get_vote_average_matches(low_vote_average, high_vote_average),
+        )
         return matched_movies
     
     def get_summary_information(self, title = None, keywords = None,
@@ -39,6 +39,8 @@ class MovieSearcher:
         empty_queryset = self.queryset.none()
         if keywords is None:
             return empty_queryset
+        if not isinstance(keywords, list):
+            raise ValueError("Input must be a list of keywords, not single keyword")
         
         individual_matches = [self.get_keyword_matches(k) for k in keywords]
         return empty_queryset.union(*individual_matches)

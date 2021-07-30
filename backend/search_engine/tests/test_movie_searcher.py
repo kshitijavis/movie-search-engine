@@ -29,16 +29,23 @@ class MovieSearcherTestCase(TestCase):
         self.searcher = movie_searcher.MovieSearcher(Movie.objects.all())
 
     def testSearchByTitle(self):
-        results = self.searcher.search_movies(name="Space")
+        results = self.searcher.search_movies(title="Space")
 
         self.assertEqual(len(results), 1)
         self.assertIn(self.space_jam, results)
     
-    def testSearchByTitle(self):
+    def testSearchByKeyword(self):
         results = self.searcher.search_movies(keywords=["action"])
         results_list = list(results.all())
 
         expected_list = [self.interstellar, self.avengers]
+        self.assertCountEqual(results_list, expected_list)
+
+    def testSearchByKeyword(self):
+        results = self.searcher.search_movies(keywords=["action", "space"])
+        results_list = list(results.all())
+
+        expected_list = [self.interstellar, self.avengers, self.space_jam]
         self.assertCountEqual(results_list, expected_list)
     
     def testSearchByLowVoteAverage(self):

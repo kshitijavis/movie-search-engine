@@ -33,20 +33,20 @@ class RankedMovieSearch(generics.ListAPIView):
     serializer_class = RankedMovieSerializer
 
     def get_queryset(self):
-        title, keyword, vote_lower_bound, vote_upper_bound = self.get_query_params(self.request)
+        title, keywords, vote_lower_bound, vote_upper_bound = self.get_query_params(self.request)
 
         movie_searcher = MovieSearcher(Movie.objects.all())
         search_results = movie_searcher.search_movies(
-            title, [keyword], vote_lower_bound, vote_upper_bound
+            title, keywords, vote_lower_bound, vote_upper_bound
         )
         return search_results.all()
 
     def get_serializer_context(self):
-        title, keyword, vote_lower_bound, vote_upper_bound = self.get_query_params(self.request)
+        title, keywords, vote_lower_bound, vote_upper_bound = self.get_query_params(self.request)
 
         movie_searcher = MovieSearcher(Movie.objects.all())
         summary_information = movie_searcher.get_summary_information(
-            title, [keyword], vote_lower_bound, vote_upper_bound
+            title, keywords, vote_lower_bound, vote_upper_bound
         )
 
         context = super(RankedMovieSearch, self).get_serializer_context()
@@ -54,10 +54,9 @@ class RankedMovieSearch(generics.ListAPIView):
         return context
         
     def get_query_params(self, request):
-        print(request)
         title = request.query_params.get('title')
-        keyword = request.query_params.get('keyword')
+        keywords = request.query_params.getlist('keyword') # Get list of keyword params
         vote_lower_bound = request.query_params.get('vote_lower_bound')
         vote_upper_bound = request.query_params.get('vote_upper_bound')
 
-        return (title, keyword, vote_lower_bound, vote_upper_bound)
+        return (title, keywords, vote_lower_bound, vote_upper_bound)
