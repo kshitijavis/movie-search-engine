@@ -6,7 +6,7 @@ class MovieSearcher:
     
     def search_movies(self, title = None, keywords = None,
                       low_vote_average = None, high_vote_average = None):
-        # self.queryset.update(match_score=0)
+        self.queryset.update(match_score=0)
 
         search_matches = [self.get_title_matches(title),
                           *self.get_multiple_keyword_matches(keywords),
