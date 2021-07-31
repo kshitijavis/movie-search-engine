@@ -23,7 +23,6 @@ class RankedMovieSerializer(serializers.ModelSerializer):
     # is a list of dictionaries, each describing the type and contents of the match
     # A match_score describes how closely a movie matches the search criteria
     match_summary = serializers.SerializerMethodField()
-    match_score = serializers.SerializerMethodField()
 
     class Meta:
         model = Movie
@@ -34,8 +33,3 @@ class RankedMovieSerializer(serializers.ModelSerializer):
         # A SummaryMatch object is passed through context and the correct summary for this
         # movie is retrieved by Movie id (obj.id)
         return self.context['match_summary'].get_match_summary(obj.id)
-
-    def get_match_score(self, obj):
-        # A SummaryMatch object is passed through context and the correct summary for this
-        # movie is retrieved by Movie id (obj.id)
-        return self.context['match_summary'].get_match_score(obj.id)

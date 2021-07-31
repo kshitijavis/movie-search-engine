@@ -1,15 +1,22 @@
+from django.db.models import F
+
 class MovieSearcher:
     def __init__(self, queryset):
         self.queryset = queryset
     
     def search_movies(self, title = None, keywords = None,
                       low_vote_average = None, high_vote_average = None):
-        matched_movies = self.queryset.none().union(
-            self.get_title_matches(title),
-            *self.get_multiple_keyword_matches(keywords),
-            self.get_vote_average_matches(low_vote_average, high_vote_average),
-        )
-        return matched_movies
+        # self.queryset.update(match_score=0)
+
+        search_matches = [self.get_title_matches(title),
+                          *self.get_multiple_keyword_matches(keywords),
+                          self.get_vote_average_matches(low_vote_average, high_vote_average)
+        ]
+
+        for match in search_matches:
+            self.increment_match_score(match)
+
+        return self.queryset.none().union(*search_matches)
     
     def get_summary_information(self, title = None, keywords = None,
                             low_vote_average = None, high_vote_average = None):
@@ -28,14 +35,11 @@ class MovieSearcher:
         for match in self.get_vote_average_matches(low_vote_average, high_vote_average):
             summary.add_match(match.id, 'vote_average', match.vote_average)
 
-        self.__set_match_scores(summary)
-
         return summary
     
-    def __set_match_scores(self, summary):
-        for movie_id in summary.get_movie_ids():
-            match_score = len(summary.get_match_summary(movie_id))
-            summary.set_match_score(movie_id, match_score)
+
+    def increment_match_score(slf, queryset):
+        queryset.update(match_score = F('match_score') + 1)
 
     def get_title_matches(self, title):
         if title is not None:
@@ -77,11 +81,9 @@ class MovieSearcher:
 
 class SummaryInformation:
     """
-    Stores information detailing how a movie matched a list of search criteria.
-    For every movie, SummaryInformation stores a Match Score, which quantifies how
-    strongly a movie matches the search criteria (higher scores signify a better movie match).
-    Summary information also stores a dictionary of a movie and its corresponding Match Summary.
-    For every movie, the Match Summary is format like so:
+    Stores information detailing how a movie matched a list of search criteria. Stores a 
+    dictionary of movies and their corresponding Match Summary. For every movie, the 
+    Match Summary is format like so:
 
     [
         {

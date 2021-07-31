@@ -9,6 +9,8 @@ class Movie(models.Model):
 
     keywords = models.ManyToManyField('Keyword', related_name='movies')
 
+    match_score = models.IntegerField(null=True)
+
     def __str__(self):
         return self.title
 
