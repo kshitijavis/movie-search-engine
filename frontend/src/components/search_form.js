@@ -15,9 +15,9 @@ class SearchForm extends React.Component {
     this.state = {
       // Stores the four search criteria
       title: '',
-      keywords: [''],
-      vote_lower_bound: 0,
-      vote_upper_bound: 10,
+      keywords: [],
+      vote_lower_bound: '',
+      vote_upper_bound: '',
     };
   }
 
@@ -36,7 +36,13 @@ class SearchForm extends React.Component {
   }
 
   handleSubmit = (event) => {
-    console.log(this.state) // Will be used to send API call
+    event.preventDefault();
+    this.props.onSubmit(
+      this.state.title, 
+      this.state.keywords, 
+      this.state.vote_lower_bound, 
+      this.state.vote_upper_bound
+    )
   }
 
   addKeyword = (event) => {

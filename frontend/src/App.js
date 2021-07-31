@@ -1,7 +1,6 @@
-import logo from './logo.svg';
 import './App.css';
 import React from 'react';
-import SearchForm from './components/search_form'
+import SearchPage from './components/search_page';
 
 class App extends React.Component {
   render() {
@@ -10,11 +9,11 @@ class App extends React.Component {
         <div>
           <div>
             <h1>Hello World</h1>
-            <SearchForm></SearchForm>
+            <SearchPage id='search_page'></SearchPage>
           </div>
         </div>
       </div>
-    ); 
+    );
   }
 }
 
