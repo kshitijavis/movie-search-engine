@@ -37,6 +37,26 @@ DATABASE_HOST=<database host>
 DATABASE_PORT=<port that database is running on>
 ```
 Replace all fields wrapped in the angle brackets with your new database credentials.
+### Add Tables and Data to Database
+1) Make sure you have **python3** downloaded.
+2) In your command line, navigate to the root of this project.
+3) Navigate to the backend directory
+    ```
+    cd backend
+    ```
+4) Setup tables in your database as specified in the Python Django configuration. This is done through Django migrations
+    ```
+    python manage.py migrate
+    ```
+5) Navigate to back to root directory and then to `scripts` directory.
+    ```
+    cd ..
+    ```
+6) Run `store_data.py` script in the `scripts` directory using Python. This will populate your new database tables with the data in your `.csv` files.
+    ```
+    python scripts/store_data.py
+    ```
+    If you have trouble running this script, make sure your [environment variables](Set-Environment-Variables) are setup correctly in your `.env` file and your [data is correctly stored](Get-the-Data) in a `data` directory.
 ### Setup Dependencies
 1) In your command line, navigate to the root of this project
 2) Install python dependencies as specified in `requirements.txt`. You may want to install dependencies in a virtual environment.
@@ -49,17 +69,6 @@ Replace all fields wrapped in the angle brackets with your new database credenti
     npm install
     ```
 ### Running the Search Engine
-1) Make sure you have **python3** and **Node.js** downloaded.
-
-2) In your command line, navigate to the root of this project.
-3) Navigate to the backend directory
-    ```
-    cd backend
-    ```
-4) Setup tables in your database as specified in the Python Django configuration. This is done through Django migrations
-    ```
-    python manage.py migrate
-    ```
 5) Run the backend Django server
     ```
     python mange.py runserver
@@ -75,7 +84,7 @@ Replace all fields wrapped in the angle brackets with your new database credenti
     ```
 8) The movie search engine should now be running locally on `localhost:3000`
 ## Optional: Add Image Search
-The `/movies/<id>` endpoint on the React App lists details about a movie. The app also uses Google Custom Search Engine (GCSE) to find and display a cover image of the movie. To set up image-rendering, follow these steps.
+The `/movies/<id>` endpoint on the React App gives detailed information about a given movie. The app also uses Google Custom Search Engine (GCSE) to find and display a cover image of the movie. To set up image-rendering, follow these steps.
 1) Visit [GCSE API](https://developers.google.com/custom-search/v1/overview). Scroll down and click the blue **Get a Key** button. This will prompt you to sign in using Google credentials.
 2) Once signed in, you should see a prompt to _Enable Custom Search API_. Click the drop down and press _+ Create a new Project_. Type in "Movie Search Engine" and hit next.
 3) You should receive an API Key. This needs to be added as an environment variable. Open up `.env` at the root of this project and add the following:
