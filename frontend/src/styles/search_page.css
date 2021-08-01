@@ -1,0 +1,58 @@
+.search-form {
+    width: 60%;
+    padding: 1%;
+    text-align: left;
+    margin: auto
+}
+
+.search-form input {
+    margin-bottom: 2%;
+}
+
+.search-form button {
+    margin-top: 2%;
+}
+
+.keyword-group-title {
+    margin-top:2%;
+}
+
+.keyword-group {
+    margin: 0%;
+    padding: 0%;
+}
+
+.keyword-group input {
+    margin-top: 2%;
+    margin-left: 0%
+}
+
+.search-result-group {
+    margin-top: 5%;
+}
+
+.search-result {
+    width: 60%;
+    padding: 1%;
+    text-align: left;
+    margin: auto
+}
+
+.match-table-col-1 {
+    width: 25%;
+}
+
+.match-summary {
+    margin-top: 2%;
+    font-size: large;
+    font-weight: bolder;
+}
+
+.match-score {
+    font-style: italic
+}
+
+.ratings-middle-text {
+    text-align: center;
+    font-size: medium;
+}

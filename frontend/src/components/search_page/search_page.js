@@ -3,6 +3,7 @@ import SearchForm from './search_form'
 import axios from 'axios'
 import SearchResult from './search_result'
 import PageNavigator from '../page_navigator'
+import {ListGroup, ListGroupItem} from 'react-bootstrap'
 
 class SearchPage extends React.Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class SearchPage extends React.Component {
     // Empty inputs shouldn't be added to query string
     if (title !== '') params.append("title", title);
     if (vote_lower_bound !== '') params.append("vote_lower_bound", vote_lower_bound)
-    if (vote_upper_bound !== '') params.append("vote_lower_bound", vote_upper_bound)
+    if (vote_upper_bound !== '') params.append("vote_upper_bound", vote_upper_bound)
     keywords.forEach(keyword => params.append("keyword", keyword))
 
     // Send GET request and update state based on request
@@ -46,13 +47,13 @@ class SearchPage extends React.Component {
 
   renderSearchResults = () => {
     return this.state.searchResults.map((result) => (
-      <li
+      <ListGroupItem
         key={`result_movie_${result.id}`}
       >
         <SearchResult
           result={result}
         />
-      </li>
+      </ListGroupItem>
     ))
   }
 
@@ -63,10 +64,11 @@ class SearchPage extends React.Component {
         <SearchForm
           onSubmit={this.searchAndUpdateMovies}
         />
-        <ul>
+        <ListGroup className='search-result-group'>
           {this.renderSearchResults()}
-        </ul>
+        </ListGroup>
         <PageNavigator
+          className='page-navigator'
           nextPageUrl={this.state.nextPageUrl}
           prevPageUrl={this.state.prevPageUrl}
           onChangePage={this.searchAndUpdateMoviesUrl}

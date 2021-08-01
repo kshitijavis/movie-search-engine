@@ -1,5 +1,7 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import {Button, Form, Row, Col, ListGroup, FormGroup, FormText} from 'react-bootstrap';
+import '../../styles/search_page.css'
+import '../../styles/general.css'
 
 /**
  * A Form Component that allows users to movie search criteria
@@ -16,14 +18,14 @@ class SearchForm extends React.Component {
     this.state = {
       // Stores the four search criteria
       title: '',
-      keywords: [],
+      keywords: [''],
       vote_lower_bound: '',
       vote_upper_bound: '',
     };
   }
 
   handleChange = (event) => {
-    if (event.target.className === 'keyword input') {
+    if (event.target.name === 'keyword') {
       // Handle change to keyword input text fields
       let newKeywords = this.state.keywords.slice()
       newKeywords[event.target.dataset.id] = event.target.value;
@@ -66,64 +68,92 @@ class SearchForm extends React.Component {
     const keywords = this.state.keywords;
 
     return keywords.map((keyword, idx) => (
-      <li key={idx}>
-        <label>
-          Keyword:
-          <input
-            type='text'
-            name='keyword'
-            data-id={idx}
-            className="keyword input"
-            onChange={this.handleChange}
-          />
-        </label>
-        <Button
-          id={`delete_keyword${idx}`}
-          data-id={idx}
-          onClick={this.deleteKeyword}
-          variant='danger'
-        >
-          Delete Keyword
-        </Button>
-      </li>
+      <ListGroup.Item 
+        className="keyword-group"
+        key={idx}>
+        <Row>
+          <Col>
+            <Form.Control
+              type='text'
+              name='keyword'
+              data-id={idx}
+              className="keyword-input"
+              value={this.state.keywords[idx]}
+              placeholder={`Enter Keyword ${idx+1}`}
+              onChange={this.handleChange}
+            />
+          </Col>
+          <Col>
+            <Button
+              id={`delete_keyword${idx}`}
+              data-id={idx}
+              onClick={this.deleteKeyword}
+              variant='danger'
+            >
+              Delete Keyword
+            </Button>
+          </Col>
+        </Row>
+      </ListGroup.Item>
     ))
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Title: 
-          <input 
-            name='title' 
-            type='text' 
-            value={this.state.title} 
-            onChange={this.handleChange}/>
-        </label>
-        <br />
-        <label>
-          Vote average lower bound:
-          <input 
-            name='vote_lower_bound' 
-            type='number' 
-            value={this.state.vote_lower_bound} 
-            onChange={this.handleChange}/>
-        </label>
-        <label>
-          Vote average upper bound:
-          <input 
-            name='vote_upper_bound'
-            type='number' 
-            value={this.state.vote_upper_bound} 
-            onChange={this.handleChange}/>
-        </label>
-        <br />
-        <ul>
+      <Form 
+       className='search-form rounded-border'
+       onSubmit={this.handleSubmit}>
+        <Form.Group controlId="form_title">
+          <Form.Label>Title</Form.Label>
+            <Form.Control 
+              name='title' 
+              type='text' 
+              placeholder='Enter title'
+              value={this.state.title} 
+              onChange={this.handleChange}/>
+        </Form.Group>
+        <Row id='vote_bounds'>
+        <Form.Label>Ratings</Form.Label>
+          <Col>
+            <Form.Group controlId='form_vote_lower_bound'>
+                <Form.Control 
+                  name='vote_lower_bound' 
+                  type='number'
+                  placeholder='Min'
+                  value={this.state.vote_lower_bound} 
+                  onChange={this.handleChange}/>
+                <FormText>Values between 0-10</FormText>
+            </Form.Group>
+          </Col>
+          <Col xs={1}>
+            <p className='ratings-middle-text'>to</p>
+          </Col>
+          <Col>
+            <Form.Group controlId='form_vote_upper_bound'>
+                <Form.Control 
+                  name='vote_upper_bound' 
+                  type='number'
+                  placeholder='Max'
+                  value={this.state.vote_upper_bound} 
+                  onChange={this.handleChange}/>
+                <FormText>Values between 0-10</FormText>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <ListGroup variant="flush">
+        <Form.Label className='keyword-group-title'>Keywords</Form.Label>
           {this.renderKeywordInput()}
-        </ul>
-        <button onClick={this.addKeyword}>Add Keyword</button>
-        <input type='submit' onSubmit={this.handleSubmit}/>
-      </form>
+        </ListGroup>
+        <Button variant='secondary' onClick={this.addKeyword}>Add Keyword</Button>
+        <Button 
+         className='pull-right'
+         type='primary' 
+         onSubmit={this.handleSubmit}
+        >
+          Search
+        </Button>
+      </Form>
     );
   }
 }

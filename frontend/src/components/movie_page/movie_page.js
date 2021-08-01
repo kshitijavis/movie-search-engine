@@ -2,6 +2,8 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios'
 import { Button, ListGroup } from 'react-bootstrap'
+import '../../styles/movie_page.css'
+import '../../styles/general.css'
 
 class MoviePage extends React.Component {
   constructor(props) {
@@ -46,12 +48,22 @@ class MoviePage extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='body'>
         <h1 id='movie_title'>{this.state.title}</h1>
-        <h2 id='movie_tagline'>{this.state.tagline}</h2>
-        <p id='movie_vote_average'>Average rating: {this.state.vote_average}</p>
-        <ListGroup>{this.renderKeywords()}</ListGroup>
-        <Button href="/" id='back_to_search'>Back To Search</Button>
+        <h2>{this.state.tagline}</h2>
+        <br></br>
+
+        <p id='movie_vote_average'>Average Rating: {this.state.vote_average}</p>
+        <h4>Overview</h4>
+        <div className='overview rectangle-border'>
+          <p>{this.state.overview}</p>
+        </div>
+        <br></br>
+
+        <h4>Keywords</h4>
+        <ListGroup className='keywords'>{this.renderKeywords()}</ListGroup>
+
+        <Button className='back-button' href="/" id='back_to_search'>Back To Search</Button>
       </div>
     )
   }
