@@ -38,7 +38,7 @@ class RankedMovieSearch(generics.ListAPIView):
         movie_searcher = MovieSearcher(Movie.objects.all())
         search_results = movie_searcher.search_movies(
             title, keywords, vote_lower_bound, vote_upper_bound
-        )
+        ).order_by('-match_score', 'title')
         return search_results.all()
 
     def get_serializer_context(self):
