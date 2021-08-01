@@ -15,12 +15,12 @@ class SearchPage extends React.Component {
   }
 
   searchAndUpdateMovies = (title, keywords, vote_lower_bound, vote_upper_bound) => {
-    let params = {}
+    let params = new URLSearchParams();
     // Empty inputs shouldn't be added to query string
-    if (title !== '') params.title = title
-    if (keywords !== []) params.keywords = keywords
-    if (vote_lower_bound !== '') params.vote_lower_bound = vote_lower_bound
-    if (vote_upper_bound !== '') params.vote_lower_bound = vote_upper_bound
+    if (title !== '') params.append("title", title);
+    if (vote_lower_bound !== '') params.append("vote_lower_bound", vote_lower_bound)
+    if (vote_upper_bound !== '') params.append("vote_lower_bound", vote_upper_bound)
+    keywords.forEach(keyword => params.append("keyword", keyword))
 
     // Send GET request and update state based on request
     axios
