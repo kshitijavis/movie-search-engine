@@ -2,7 +2,7 @@ import React from 'react'
 import SearchForm from './search_form'
 import axios from 'axios'
 import SearchResult from './search_result'
-import PageNavigator from './page_navigator'
+import PageNavigator from '../page_navigator'
 
 class SearchPage extends React.Component {
   constructor(props) {
@@ -24,8 +24,8 @@ class SearchPage extends React.Component {
 
     // Send GET request and update state based on request
     axios
-      .get('http://localhost:8000/api/searchengine/search/', { params: params })
-      .then((res) => this.setStateBySearchResponse(res.data))
+      .get('/api/searchengine/search/', { params: params })
+      .then((res) => {console.log(res); return this.setStateBySearchResponse(res.data)})
       .catch((err) => console.log(err))
   }
 
@@ -47,7 +47,7 @@ class SearchPage extends React.Component {
   renderSearchResults = () => {
     return this.state.searchResults.map((result) => (
       <li
-        key={result.id}
+        key={`result_movie_${result.id}`}
       >
         <SearchResult
           result={result}

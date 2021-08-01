@@ -20,7 +20,11 @@ class SearchResult extends React.Component {
   render() {
     return (
       <div>
-        <h4>{this.props.result.title}</h4>
+        <h4><a 
+          href={`movies\\${this.props.result.id}`}
+        >
+          {this.props.result.title}</a>
+        </h4>
         <p>Match score: {this.props.result.match_score}</p>
         <ul>{this.renderMatchSummary()}</ul>
       </div>
