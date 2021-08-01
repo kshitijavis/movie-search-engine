@@ -1,0 +1,12 @@
+.rounded-border {
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.rectangle-border {
+    border: 1px solid gray;
+}
+
+.pull-right {
+    float: right;
+}

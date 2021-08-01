@@ -1,8 +1,11 @@
 from rest_framework import generics
+from rest_framework.views import APIView
 from search_engine.models import Movie, Keyword
 from search_engine.serializers import MovieSerializer, RankedMovieSerializer, KeywordSerializer
-from django.http import HttpResponse
-from search_engine.movie_searcher import MovieSearcher, SummaryInformation
+from django.http import HttpResponse, Http404, JsonResponse
+from search_engine.movie_searcher import MovieSearcher
+
+from search_engine.movie_image import SearchMovieImage
 
 # Create your views here.
 def index(request):
@@ -38,7 +41,7 @@ class RankedMovieSearch(generics.ListAPIView):
         movie_searcher = MovieSearcher(Movie.objects.all())
         search_results = movie_searcher.search_movies(
             title, keywords, vote_lower_bound, vote_upper_bound
-        )
+        ).order_by('-match_score', '-vote_average')
         return search_results.all()
 
     def get_serializer_context(self):
@@ -60,3 +63,19 @@ class RankedMovieSearch(generics.ListAPIView):
         vote_upper_bound = request.query_params.get('vote_upper_bound')
 
         return (title, keywords, vote_lower_bound, vote_upper_bound)
+
+class MovieImage(APIView):
+    """
+    Retrieve an image of a movie using Google Custom Search API
+    """
+    def get_object(self, pk):
+        try:
+            return Movie.objects.get(pk=pk)
+        except Movie.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        movie = self.get_object(pk)
+        response = SearchMovieImage(movie.title)
+        return JsonResponse(response)
+
