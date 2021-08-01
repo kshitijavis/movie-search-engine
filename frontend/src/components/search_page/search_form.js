@@ -1,4 +1,5 @@
 import React from 'react';
+import {Button} from 'react-bootstrap';
 
 /**
  * A Form Component that allows users to movie search criteria
@@ -53,6 +54,13 @@ class SearchForm extends React.Component {
     }));
   }
 
+  deleteKeyword = (event) => {
+    event.preventDefault(); // Keep from calling handleSubmit
+    let newKeywords = this.state.keywords.slice()
+    newKeywords.splice(event.target.dataset.id, 1)
+    this.setState({ keywords: newKeywords})
+  }
+
   renderKeywordInput = () => {
     // Generates dynamic list of inputs using keyword state
     const keywords = this.state.keywords;
@@ -69,6 +77,14 @@ class SearchForm extends React.Component {
             onChange={this.handleChange}
           />
         </label>
+        <Button
+          id={`delete_keyword${idx}`}
+          data-id={idx}
+          onClick={this.deleteKeyword}
+          variant='danger'
+        >
+          Delete Keyword
+        </Button>
       </li>
     ))
   }
