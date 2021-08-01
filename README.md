@@ -1,8 +1,14 @@
 # movie-search-engine
 
 ## Installation
+### Get the Data
+1) Clone this repository onto your local machine. The root of this project will be the `movie-search-engine` directory.
+    ```
+    git clone https://github.com/kshitijavis/movie-search-engine.git movie-search-engine
+    ```
+2) This app uses two datasets from the [Movies Dataset](https://www.kaggle.com/rounakbanik/the-movies-dataset) on Kaggle. From Kaggle, download the `movies_metadata.csv` and `keywords.csv` files. Create a `data` directory in the root of your project and move the two files into the new directory.
 ### Setup MySQL Database
-The following steps will create a MySQL user and database where movie data will be stored. This guide will 
+The following steps will create a MySQL user and database where movie data will be stored.
 
 1) Login to your MySQL server interactive prompt and crete a new database
     ```
@@ -21,8 +27,8 @@ The following steps will create a MySQL user and database where movie data will 
     FLUSH PRIVILEGES;
     ```
 ### Set Environment Variables
-To connect Django to a MySQL database, you will need to add detabase information to a `.env` file
-Create a `.env` in `backend/backend` and populate it like so
+To connect Django to a MySQL database, you will need to add database information to a `.env` file
+Create a `.env` in the root of your project and populate it like so
 ```
 DATABASE_NAME=<database name>
 DATABASE_USER=<database username>
@@ -30,6 +36,44 @@ DATABASE_PASSWORD=<database password>
 DATABASE_HOST=<database host>
 DATABASE_PORT=<port that database is running on>
 ```
+Replace all fields wrapped in the angle brackets with your new database credentials.
+### Setup Dependencies
+1) In your command line, navigate to the root of this project
+2) Install python dependencies as specified in `requirements.txt`. You may want to install dependencies in a virtual environment.
+    ```
+    pip install -r requirements.txt
+    ```
+3) Navigate to the frontend directory. Then install node dependencies.
+    ```
+    cd frontend
+    npm install
+    ```
+### Running the Search Engine
+1) Make sure you have **python3** and **Node.js** downloaded.
+
+2) In your command line, navigate to the root of this project.
+3) Navigate to the backend directory
+    ```
+    cd backend
+    ```
+4) Setup tables in your database as specified in the Python Django configuration. This is done through Django migrations
+    ```
+    python manage.py migrate
+    ```
+5) Run the backend Django server
+    ```
+    python mange.py runserver
+    ```
+6) Navigate to the frontend directory
+    ```
+    cd ..
+    cd frontend
+    ```
+7) Run the client server
+    ```
+    npm start
+    ```
+8) The movie search engine should now be running locally on `localhost:3000`
 ## Optional: Add Image Search
 The `/movies/<id>` endpoint on the React App lists details about a movie. The app also uses Google Custom Search Engine (GCSE) to find and display a cover image of the movie. To set up image-rendering, follow these steps.
 1) Visit [GCSE API](https://developers.google.com/custom-search/v1/overview). Scroll down and click the blue **Get a Key** button. This will prompt you to sign in using Google credentials.
@@ -47,15 +91,14 @@ GOOGLE_ENGINE_ID=<search engine id>
 
 Now, the first image that GCSE finds for a given movie will be displayed on the app.
 
-
-
-## Testing
+## Optional: Testing
 Running the project test suite requires a test database. Create the database by running the following MySQL commands.
 ```
 GRANT ALL ON test_<database name>.* to <username>@'%';
 FLUSH PRIVILEGES;
 ```
 Where <database name> is the name of the database created while installing this app. Note that the test database name prepends `test_` to the application database.
+
 ## Notes
 The following error sometimes occurres on MacOS systems when connecting to MySQL
 ```
