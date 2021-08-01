@@ -1,9 +1,10 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios'
-import { Button, ListGroup } from 'react-bootstrap'
+import { Button, ListGroup, Row, Col } from 'react-bootstrap'
 import '../../styles/movie_page.css'
 import '../../styles/general.css'
+import MovieImage from './movie_image';
 
 class MoviePage extends React.Component {
   constructor(props) {
@@ -37,7 +38,8 @@ class MoviePage extends React.Component {
   renderKeywords = () => {
     return (
       this.state.keywords.map((keyword, idx) => (
-        <ListGroup.Item 
+        <ListGroup.Item
+          key={idx}
           id={`${keyword}_${idx}`}
         >
           {keyword}
@@ -60,10 +62,18 @@ class MoviePage extends React.Component {
         </div>
         <br></br>
 
-        <h4>Keywords</h4>
-        <ListGroup className='keywords'>{this.renderKeywords()}</ListGroup>
-
-        <Button className='back-button' href="/" id='back_to_search'>Back To Search</Button>
+        <Row>
+          <Col>
+            <h4>Keywords</h4>
+            <ListGroup className='keywords'>{this.renderKeywords()}</ListGroup>
+            <Button className='back-button' href="/" id='back_to_search'>Back To Search</Button>
+          </Col>
+          <Col>
+            <MovieImage
+              movie_id={this.props.match.params.id}
+            />
+          </Col>
+        </Row>
       </div>
     )
   }
