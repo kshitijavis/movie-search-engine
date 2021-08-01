@@ -56,7 +56,7 @@ Replace all fields wrapped in the angle brackets with your new database credenti
     ```
     python scripts/store_data.py
     ```
-    If you have trouble running this script, make sure your [environment variables](Set-Environment-Variables) are setup correctly in your `.env` file and your [data is correctly stored](Get-the-Data) in a `data` directory.
+    If you have trouble running this script, make sure your [environment variables](#set-environment-variables) are setup correctly in your `.env` file and your [data is correctly stored](#get-the-data) in a `data` directory.
 ### Setup Dependencies
 1) In your command line, navigate to the root of this project
 2) Install python dependencies as specified in `requirements.txt`. You may want to install dependencies in a virtual environment.
